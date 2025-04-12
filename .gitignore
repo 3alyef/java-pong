@@ -22,3 +22,13 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# === Maven ===
+/target/
+# Diretório onde o Maven coloca os builds (binários, relatórios, etc)
+!.mvn/wrapper/maven-wrapper.jar  
+# Ignora tudo em .mvn exceto esse arquivo necessário pro wrapper
+.mvn/timing.properties
+.settings/
+dependency-reduced-pom.xml
+buildNumber.properties
