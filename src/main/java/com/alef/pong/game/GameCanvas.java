@@ -1,5 +1,6 @@
 package com.alef.pong.game;
 
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
@@ -24,12 +25,14 @@ public class GameCanvas extends Canvas {
 	}
 
 	public void startScreenMonitoring(Stage stage) {
-		stage.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+		Scene scene = stage.getScene();
+		// scene pega so as medidas da área utilizavel;
+		scene.widthProperty().addListener((obs, oldWidth, newWidth) -> {
 			WIDTH = newWidth.doubleValue();
 			this.setWidth(WIDTH);
 		});
 
-		stage.heightProperty().addListener((obs, oldHeight, newHeight) -> {
+		scene.heightProperty().addListener((obs, oldHeight, newHeight) -> {
 			HEIGHT = newHeight.doubleValue();
 			this.setHeight(HEIGHT);
 		});
