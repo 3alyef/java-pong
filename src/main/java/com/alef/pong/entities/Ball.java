@@ -1,12 +1,12 @@
 package com.alef.pong.entities;
 
-import com.alef.pong.entities.base.Entity;
+import com.alef.pong.entities.base.PhysicsEntity;
 import com.alef.pong.game.GameCanvas;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Ball extends Entity {
+public class Ball extends PhysicsEntity {
 	private static final double DEFAULT_RADIUS = 10;
 
 	public Ball(double startX, double startY) {
@@ -15,8 +15,8 @@ public class Ball extends Entity {
 				startY,
 				DEFAULT_RADIUS * 2,
 				DEFAULT_RADIUS * 2,
-				5,
-				5);
+				10,
+				4);
 	}
 
 	public void update() {

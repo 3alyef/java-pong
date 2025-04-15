@@ -18,7 +18,7 @@ public class Game {
 
 	public Game() {
 		this.canvas = new GameCanvas();
-		this.ball = new Ball(20, 20);
+		this.ball = new Ball(125, 20);
 		this.penddle = new Penddle(10, false);
 	}
 
@@ -50,6 +50,8 @@ public class Game {
 
 		// gc.setFill(Color.WHITE);
 		// gc.fillOval(390, 290, 20, 20);
+
+		this.checkPenddleBallColision(penddle, ball);
 
 		this.ball.draw(gc);
 		this.ball.update();
@@ -92,5 +94,50 @@ public class Game {
 					break;
 			}
 		});
+	}
+
+	private void checkPenddleBallColision(Penddle penddle, Ball ball) {
+		/*
+		 * Horizontal Colision:
+		 * ballX + ballWidth >= penddleX
+		 * && ballX <= penddleX + penddleWidth
+		 */
+		double ballX = ball.getCoordinates().x();
+		double ballHorArea = ballX + ball.getWidth();
+		double penddleX = penddle.getCoordinates().x();
+		double penddleHorArea = penddleX + penddle.getWidth();
+
+		double ballY = ball.getCoordinates().y();
+		double ballVerArea = ballY + ball.getHeight();
+		double penddleY = penddle.getCoordinates().y();
+		double penddleVerArea = penddleY + penddle.getHeight();
+
+		double ballDx = ball.getDx();
+		double penddleDx = penddle.getDx();
+
+		if (ballHorArea >= penddleX && ballX <= penddleHorArea) {
+			if (ballVerArea >= penddleY && ballY <= penddleVerArea) {
+				/*
+				 * double newDx = ball.getDx() * -1;
+				 * ball.setDx(newDx);
+				 * double newDy = ball.getDy() * -1;
+				 * ball.setDy(newDy);
+				 */
+
+				if (!(penddle.getMoveRight() && penddle.getMoveLeft())) {
+					if (ballDx >= 0 && penddle.getMoveRight()) {
+						double newDx = (ballDx + penddleDx);
+						ball.setDx(newDx);
+					}
+					if (ballDx >= 0 && penddle.getMoveLeft()) {
+						double newDx = (ballDx - penddleDx);
+						ball.setDx(newDx);
+					}
+				}
+
+				double newDy = ball.getDy() * -1;
+				ball.setDy(newDy);
+			}
+		}
 	}
 }

@@ -7,15 +7,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Penddle extends Entity {
+	private final static double FEAR_DEEP = 25;
 	private boolean isAuto;
 	private boolean moveLeft, moveRight = false;
 
 	public Penddle(double startX, boolean isAuto) {
 		super(
 				startX,
-				GameCanvas.HEIGHT - 10,
-				25,
-				10,
+				GameCanvas.HEIGHT - FEAR_DEEP,
+				60,
+				12,
 				2,
 				0);
 		this.isAuto = isAuto;
@@ -23,7 +24,7 @@ public class Penddle extends Entity {
 
 	public void update() {
 		if (isAuto) {
-			this.checkColision(GameCanvas.WIDTH);
+			this.checkScreenColision(GameCanvas.WIDTH);
 			this.move();
 		} else {
 			this.setDirection(GameCanvas.WIDTH);
@@ -31,7 +32,7 @@ public class Penddle extends Entity {
 
 	}
 
-	private boolean checkColision(double displayWidth) {
+	private boolean checkScreenColision(double displayWidth) {
 		if (x.getValue() <= 0 || x.getValue() + getWidth() >= displayWidth) {
 			double newDx = getDx() * -1;
 			setDx(newDx);
@@ -39,7 +40,7 @@ public class Penddle extends Entity {
 		return false;
 	}
 
-	private boolean checkColision(double displayWidth, boolean leftToRight) {
+	private boolean checkScreenColision(double displayWidth, boolean leftToRight) {
 		if (leftToRight) {
 			if (x.getValue() + getWidth() >= displayWidth)
 				return true;
@@ -51,8 +52,9 @@ public class Penddle extends Entity {
 	}
 
 	public void draw(GraphicsContext gc) {
+		y.setValue(GameCanvas.HEIGHT - FEAR_DEEP);
+		// GameCanvas.HEIGHT - getHeight()
 
-		y.setValue(GameCanvas.HEIGHT - getHeight());
 		gc.setFill(Color.WHITE);
 		gc.fillRect(x.getValue(), y.getValue(), getWidth(), getHeight());
 	}
@@ -75,11 +77,19 @@ public class Penddle extends Entity {
 		this.moveRight = moveRight;
 	}
 
+	public boolean getMoveLeft() {
+		return this.moveLeft;
+	}
+
+	public boolean getMoveRight() {
+		return this.moveRight;
+	}
+
 	private void setDirection(double displayWidth) {
-		if (moveRight && !moveLeft && !checkColision(displayWidth, true)) {
+		if (moveRight && !moveLeft && !checkScreenColision(displayWidth, true)) {
 			double newX = x.getValue() + getDx();
 			x.setValue(newX);
-		} else if (moveLeft && !moveRight && !checkColision(displayWidth, false)) {
+		} else if (moveLeft && !moveRight && !checkScreenColision(displayWidth, false)) {
 			double newX = x.getValue() - getDx();
 			x.setValue(newX);
 		}
