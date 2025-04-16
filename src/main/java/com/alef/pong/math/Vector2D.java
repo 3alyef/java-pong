@@ -53,8 +53,9 @@ public class Vector2D {
 	// Normalização (direção unitária)
 	public Vector2D normalize() {
 		double length = length();
-		if (length == 0)
+		if (length == 0) {
 			return new Vector2D(0, 0);
+		}
 		return new Vector2D(this.x / length, this.y / length);
 	}
 

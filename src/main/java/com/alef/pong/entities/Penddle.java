@@ -33,40 +33,39 @@ public class Penddle extends Entity {
 	}
 
 	private boolean checkScreenColision(double displayWidth) {
-		if (x.getValue() <= 0 || x.getValue() + getWidth() >= displayWidth) {
-			double newDx = getDx() * -1;
-			setDx(newDx);
+		if (this.position.getX() <= 0 || this.position.getX() + getWidth() >= displayWidth) {
+			this.position.setX(this.position.getX() * -1);
 		}
 		return false;
 	}
 
 	private boolean checkScreenColision(double displayWidth, boolean leftToRight) {
 		if (leftToRight) {
-			if (x.getValue() + getWidth() >= displayWidth)
+			if (this.position.getX() + getWidth() >= displayWidth)
 				return true;
 		} else {
-			if (x.getValue() <= 0)
+			if (this.position.getX() <= 0)
 				return true;
 		}
 		return false;
 	}
 
 	public void draw(GraphicsContext gc) {
-		y.setValue(GameCanvas.HEIGHT - FEAR_DEEP);
+		// y.setValue(GameCanvas.HEIGHT - FEAR_DEEP);
+		this.position.setY(GameCanvas.HEIGHT - FEAR_DEEP);
 		// GameCanvas.HEIGHT - getHeight()
 
 		gc.setFill(Color.WHITE);
-		gc.fillRect(x.getValue(), y.getValue(), getWidth(), getHeight());
+		gc.fillRect(this.position.getX(), this.position.getY(), this.getWidth(), this.getHeight());
 	}
 
 	private void move() {
-		double newX = x.getValue() + getDx();
-		x.setValue(newX);
+		this.position = this.position.add(this.velocity);
 	}
 
 	public void reset() {
-		this.x.setValue(this.startX);
-		this.setDx(5);
+		this.position.set(this.startX, this.startY);
+		this.velocity.set(this.startVx, this.startVy);
 	}
 
 	public void setMoveLeft(boolean moveLeft) {
@@ -87,11 +86,9 @@ public class Penddle extends Entity {
 
 	private void setDirection(double displayWidth) {
 		if (moveRight && !moveLeft && !checkScreenColision(displayWidth, true)) {
-			double newX = x.getValue() + getDx();
-			x.setValue(newX);
+			this.position.setX(this.position.getX() + this.velocity.getX());
 		} else if (moveLeft && !moveRight && !checkScreenColision(displayWidth, false)) {
-			double newX = x.getValue() - getDx();
-			x.setValue(newX);
+			this.position.setX(this.position.getX() - this.velocity.getX());
 		}
 	}
 

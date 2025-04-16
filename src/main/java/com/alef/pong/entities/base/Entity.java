@@ -1,22 +1,24 @@
 package com.alef.pong.entities.base;
 
+import com.alef.pong.math.Vector2D;
+
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Entity {
-	protected double startX, startY;
-	protected EntityCoordinates x, y;
+	protected double startX, startY, startVx, startVy;
 	private double width, height;
-	private double dx, dy;
+	protected Vector2D position, velocity, force;
 
-	public Entity(double x, double y, double width, double height, double dx, double dy) {
-		this.x = new EntityCoordinates(x);
-		this.y = new EntityCoordinates(y);
-		this.startX = x;
-		this.startY = y;
+	public Entity(double startX, double startY, double width, double height, double dx, double dy) {
+		this.position = new Vector2D(startX, startY);
+		this.velocity = new Vector2D(dx, dy);
+		this.force = new Vector2D();
+		this.startX = startX;
+		this.startY = startY;
+		this.startVx = dx;
+		this.startVy = dy;
 		this.width = width;
 		this.height = height;
-		this.dx = dx;
-		this.dy = dy;
 	}
 
 	public abstract void update();
@@ -31,23 +33,19 @@ public abstract class Entity {
 		return this.height;
 	};
 
-	public double getDy() {
-		return this.dy;
+	public Coordinates getPosition() {
+		return new Coordinates(this.position.getX(), this.position.getY());
 	}
 
-	public double getDx() {
-		return this.dx;
+	public Coordinates getVelocity() {
+		return new Coordinates(this.velocity.getX(), this.velocity.getY());
 	}
 
-	public void setDy(double newDy) {
-		this.dy = newDy;
+	public void setVelocityX(double x) {
+		this.velocity.setX(x);
 	}
 
-	public void setDx(double newDx) {
-		this.dx = newDx;
-	}
-
-	public Coordinates getCoordinates() {
-		return new Coordinates(x.getValue(), y.getValue());
+	public void setVelocityY(double y) {
+		this.velocity.setY(y);
 	}
 }

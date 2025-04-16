@@ -102,18 +102,18 @@ public class Game {
 		 * ballX + ballWidth >= penddleX
 		 * && ballX <= penddleX + penddleWidth
 		 */
-		double ballX = ball.getCoordinates().x();
+		double ballX = ball.getPosition().x();
 		double ballHorArea = ballX + ball.getWidth();
-		double penddleX = penddle.getCoordinates().x();
+		double penddleX = penddle.getPosition().x();
 		double penddleHorArea = penddleX + penddle.getWidth();
 
-		double ballY = ball.getCoordinates().y();
+		double ballY = ball.getPosition().y();
 		double ballVerArea = ballY + ball.getHeight();
-		double penddleY = penddle.getCoordinates().y();
+		double penddleY = penddle.getPosition().y();
 		double penddleVerArea = penddleY + penddle.getHeight();
 
-		double ballDx = ball.getDx();
-		double penddleDx = penddle.getDx();
+		double ballDx = ball.getVelocity().x();
+		double penddleDx = penddle.getVelocity().x();
 
 		if (ballHorArea >= penddleX && ballX <= penddleHorArea) {
 			if (ballVerArea >= penddleY && ballY <= penddleVerArea) {
@@ -127,16 +127,16 @@ public class Game {
 				if (!(penddle.getMoveRight() && penddle.getMoveLeft())) {
 					if (ballDx >= 0 && penddle.getMoveRight()) {
 						double newDx = (ballDx + penddleDx);
-						ball.setDx(newDx);
+						ball.setVelocityX(newDx);
 					}
 					if (ballDx >= 0 && penddle.getMoveLeft()) {
 						double newDx = (ballDx - penddleDx);
-						ball.setDx(newDx);
+						ball.setVelocityX(newDx);
 					}
 				}
 
-				double newDy = ball.getDy() * -1;
-				ball.setDy(newDy);
+				double newDy = ball.getVelocity().x() * -1;
+				ball.setVelocityY(newDy);
 			}
 		}
 	}

@@ -1,12 +1,12 @@
 package com.alef.pong.entities;
 
-import com.alef.pong.entities.base.PhysicsEntity;
+import com.alef.pong.entities.base.Entity;
 import com.alef.pong.game.GameCanvas;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Ball extends PhysicsEntity {
+public class Ball extends Entity {
 	private static final double DEFAULT_RADIUS = 10;
 
 	public Ball(double startX, double startY) {
@@ -15,8 +15,8 @@ public class Ball extends PhysicsEntity {
 				startY,
 				DEFAULT_RADIUS * 2,
 				DEFAULT_RADIUS * 2,
-				10,
-				4);
+				4,
+				3);
 	}
 
 	public void update() {
@@ -26,39 +26,33 @@ public class Ball extends PhysicsEntity {
 
 	public void draw(GraphicsContext gc) {
 		gc.setFill(Color.WHITE);
-		gc.fillOval(x.getValue(), y.getValue(), DEFAULT_RADIUS * 2, DEFAULT_RADIUS * 2);
+		gc.fillOval(this.position.getX(), this.position.getY(), this.getWidth(), this.getHeight());
 	}
 
 	private void move() {
+		this.position = this.position.add(this.velocity);
 		/*
-		 * x += dx;
-		 * y += dy;
+		 * double newX = x.getValue() + getDx();
+		 * x.setValue(newX);
+		 * double newY = y.getValue() + getDy();
+		 * y.setValue(newY);
 		 */
-
-		double newX = x.getValue() + getDx();
-		x.setValue(newX);
-		double newY = y.getValue() + getDy();
-		y.setValue(newY);
 
 	}
 
 	private void checkColision() {
-		if (y.getValue() <= 0 || y.getValue() + DEFAULT_RADIUS * 2 >= GameCanvas.HEIGHT) {
-			double newDy = getDy() * -1;
-			setDy(newDy);
+		if (this.position.getY() <= 0 || this.position.getY() + this.getHeight() >= GameCanvas.HEIGHT) {
+			this.velocity.setY(this.velocity.getY() * -1);
 		}
 
-		if (x.getValue() <= 0 || x.getValue() + DEFAULT_RADIUS * 2 >= GameCanvas.WIDTH) {
-			double newDx = getDx() * -1;
-			setDx(newDx);
+		if (this.position.getX() <= 0 || this.position.getX() + this.getWidth() >= GameCanvas.WIDTH) {
+			this.velocity.setX(this.velocity.getX() * -1);
 		}
 	}
 
 	public void reset() {
-		this.x.setValue(this.startX);
-		this.y.setValue(this.startY);
-		setDx(5);
-		setDy(5);
+		this.position.set(this.startX, this.startY);
+		this.velocity.set(this.startVx, this.startVy);
 	}
 
 }
