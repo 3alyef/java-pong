@@ -1,26 +1,27 @@
 package com.alef.pong.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.alef.pong.entities.Ball;
-import com.alef.pong.entities.Paddle;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class GameEngine {
 	private final Stage stage;
 	private static final String TITLE = "Pong Game";
 	private final GameCanvas canvas;
-	private final Ball ball;
+	private final List<Ball> balls;
 	// private final Paddle playerPaddle, enemyPaddle;
 
 	public GameEngine(Stage stage) {
 		this.stage = stage;
 		this.canvas = new GameCanvas(800, 600);
-		this.ball = new Ball(canvas.getWidth(), canvas.getHeight());
+		this.balls = createBalls(12);
 		// this.playerPaddle = new Paddle(canvas, true);
 		// this.enemyPaddle = new Paddle(canvas, false);
 	}
@@ -43,11 +44,10 @@ public class GameEngine {
 				lastUpdate = now;
 				deltaTime = Math.min(deltaTime, 0.1); // Limita a 100ms
 
-				checkCollisions();
-				update(deltaTime);
 				render();
-
-				if (Math.random() < 0.0075) { // Mostra apenas 1% dos frames
+				update(deltaTime);
+				checkCollisions();
+				if (Math.random() < 0.0005) { // Mostra apenas 1% dos frames
 					System.out.printf("Delta: %.6fs | FPS: %.1f%n",
 							deltaTime,
 							1.0 / deltaTime);
@@ -56,9 +56,19 @@ public class GameEngine {
 		}.start();
 	}
 
+	private List<Ball> createBalls(int count) {
+		List<Ball> newBalls = new ArrayList<>();
+		for (int i = 0; i < count; i++) {
+			newBalls.add(new Ball(canvas.getWidth(), canvas.getHeight()));
+		}
+		return Collections.unmodifiableList(newBalls);
+	}
+
 	private void update(double deltaTime) {
 
-		ball.update(deltaTime);
+		for (Ball ball : balls) {
+			ball.update(deltaTime);
+		}
 		// playerPaddle.update(deltaTime);
 		// enemyPaddle.update(deltaTime);
 
@@ -67,12 +77,22 @@ public class GameEngine {
 
 	private void render() {
 		canvas.clear();
-		ball.draw(canvas.getGC());
+
+		for (Ball ball : balls) {
+			ball.draw(canvas.getGC());
+		}
 		/*
 		 * 
 		 * playerPaddle.draw();
 		 * enemyPaddle.draw();
 		 */
+	}
+
+	private void checkCollisions() {
+
+		for (Ball ball : balls) {
+			ball.handleWallCollision(canvas.getWidth(), canvas.getHeight());
+		}
 	}
 
 	private void setupStage() {
@@ -84,7 +104,4 @@ public class GameEngine {
 		this.stage.show();
 	}
 
-	private void checkCollisions() {
-		ball.handleWallCollision(canvas.getWidth(), canvas.getHeight());
-	}
 }
