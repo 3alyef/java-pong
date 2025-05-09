@@ -34,7 +34,6 @@ public class Ball {
 
 	public void update(double deltaTime) {
 		position = position.addScaled(velocity, deltaTime);
-		// Lógica de colisão com paredes
 
 	}
 
@@ -65,13 +64,13 @@ public class Ball {
 		if (position.getX() <= 0) {
 			velocity = velocity.withX(Math.abs(-velocity.getX()));
 			newX = 0;
-		} else if (position.getX() >= width) {
+		} else if (position.getX() + width >= canvasWidth) {
 			velocity = velocity.withX(-Math.abs(velocity.getX()));
 			newX = canvasWidth - width;
 		}
 
 		if (position.getY() <= 0) {
-			velocity = velocity.withY(Math.abs(velocity.getY()));
+			velocity = velocity.withY(Math.abs(-velocity.getY()));
 			newY = 0;
 		} else if (position.getY() + height >= canvasHeight) {
 			velocity = velocity.withY(-Math.abs(velocity.getY()));

@@ -8,16 +8,17 @@ import com.alef.pong.entities.Ball;
 import com.alef.pong.utils.Vector2;
 import com.alef.pong.utils.VectorType;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class BallManager {
 	private List<Ball> balls;
-	private final double canvasWidth;
-	private final double canvasHeight;
+	private final double initialCanvasWidth;
+	private final double initialCanvasHeight;
 
-	public BallManager(double canvasWidth, double canvasHeight, int initialBallCount) {
-		this.canvasWidth = canvasWidth;
-		this.canvasHeight = canvasHeight;
+	public BallManager(double initialCanvasWidth, double initialCanvasHeight, int initialBallCount) {
+		this.initialCanvasWidth = initialCanvasWidth;
+		this.initialCanvasHeight = initialCanvasHeight;
 		this.balls = createBalls(initialBallCount);
 	}
 
@@ -36,8 +37,8 @@ public class BallManager {
 
 		Vector2 position = new Vector2(
 				VectorType.POSITION,
-				radius + Math.random() * (canvasWidth - 2 * radius),
-				radius + Math.random() * (canvasHeight - 2 * radius));
+				radius + Math.random() * (initialCanvasWidth - 2 * radius),
+				radius + Math.random() * (initialCanvasHeight - 2 * radius));
 
 		double speed = 150 + Math.random() * 100;
 		double angle = Math.random() * Math.PI * 2;
@@ -46,7 +47,7 @@ public class BallManager {
 				Math.cos(angle) * speed,
 				Math.sin(angle) * speed);
 
-		Ball newBall = new Ball(canvasWidth, canvasHeight, radius, color, position, velocity);
+		Ball newBall = new Ball(initialCanvasWidth, initialCanvasHeight, radius, color, position, velocity);
 		return newBall;
 	}
 
@@ -54,16 +55,22 @@ public class BallManager {
 		return balls; // Retorna a lista imutável
 	}
 
-	public void updateAll(double deltaTime) {
-		for (Ball ball : balls) {
-			updateBall(ball, deltaTime);
-		}
-	}
-
-	private void updateBall(Ball ball, double deltaTime) {
+	private void updateBall(Ball ball, double deltaTime, double canvasWidth, double canvasHeight) {
 		ball.update(deltaTime);
 		ball.handleWallCollision(canvasWidth, canvasHeight);
 
+	}
+
+	public void updateAll(double deltaTime, double canvasWidth, double canvasHeight) {
+		for (Ball ball : balls) {
+			updateBall(ball, deltaTime, canvasWidth, canvasHeight);
+		}
+	}
+
+	public void renderBalls(GraphicsContext gc) {
+		for (Ball ball : balls) {
+			ball.draw(gc);
+		}
 	}
 
 }
